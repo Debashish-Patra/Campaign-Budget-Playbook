@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="An interactive guide to optimising digital acquisition budget for activated customers, with a worked case, industry benchmarks and calculators.">
+<meta property="og:title" content="Campaign Budget Playbook">
+<meta property="og:description" content="An interactive guide to optimising digital acquisition budget for activated customers, with a worked case, industry benchmarks and calculators.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231A4FD6'/%3E%3Crect x='6' y='17' width='5' height='9' fill='white'/%3E%3Crect x='13.5' y='11' width='5' height='15' fill='white'/%3E%3Crect x='21' y='6' width='5' height='20' fill='white'/%3E%3C/svg%3E">
+<style>:root{color-scheme:light}html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Campaign Budget Playbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout concept: a working manual. Sticky step index on top, one column of readable guidance,
+   each step ends in a live calculator that uses the same campaign table. */
+:root{
+  --bg:#F2F4F8; --surface:#FFFFFF; --ink:#121C2B; --muted:#586579; --line:#D8DEE8;
+  --accent:#1A4FD6; --accent-soft:#E5ECFC; --accent-ink:#FFFFFF;
+  --good:#16783C; --good-soft:#E3F4E9; --warn:#9A5B05; --warn-soft:#FBEFD9; --bad:#B7311F; --bad-soft:#FBE7E3;
+  --f-display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0C131E; --surface:#141D2B; --ink:#E7ECF4; --muted:#9AA7BB; --line:#27334A;
+    --accent:#7BA0FF; --accent-soft:#1B2B52; --accent-ink:#0C131E;
+    --good:#52C98B; --good-soft:#12301F; --warn:#F0B554; --warn-soft:#38290E; --bad:#FF8070; --bad-soft:#3E1B16;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0C131E; --surface:#141D2B; --ink:#E7ECF4; --muted:#9AA7BB; --line:#27334A;
+  --accent:#7BA0FF; --accent-soft:#1B2B52; --accent-ink:#0C131E;
+  --good:#52C98B; --good-soft:#12301F; --warn:#F0B554; --warn-soft:#38290E; --bad:#FF8070; --bad-soft:#3E1B16;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;
+  padding-block:0 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--surface);z-index:30}
+.wrap{max-width:1020px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(2rem,5vw,3rem);font-weight:700;letter-spacing:-.02em}
+h2{font-size:clamp(1.5rem,3.2vw,2rem);font-weight:700;letter-spacing:-.015em}
+h3{font-size:1.1rem;font-weight:700}
+p{margin:0}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* index bar */
+.index{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line);
+  margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px))) ;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.index .in{max-width:1020px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:10px 0;scrollbar-width:thin}
+.index a{white-space:nowrap;text-decoration:none;color:var(--muted);font-size:.875rem;font-weight:500;padding:6px 12px;border-radius:6px;border:1px solid transparent}
+.index a:hover{color:var(--ink);border-color:var(--line)}
+.index a b{font-family:var(--f-mono);font-weight:500;color:var(--accent);margin-right:6px}
+
+/* header */
+.hero{padding:44px 0 28px;display:grid;gap:18px}
+.eyebrow{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.lede{font-size:1.125rem;color:var(--muted);max-width:62ch}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{font-size:.8125rem;padding:4px 10px;border-radius:999px;background:var(--accent-soft);color:var(--ink);border:1px solid var(--line)}
+.pill b{font-family:var(--f-mono);font-weight:500}
+
+section{padding:36px 0;border-top:1px solid var(--line);display:grid;gap:20px}
+section>header{display:grid;gap:8px}
+.tag{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.prose{max-width:68ch;display:grid;gap:12px}
+.prose ul{margin:0;padding-left:1.2rem;display:grid;gap:6px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px;min-width:0}
+.card h3{margin-bottom:8px}
+.card.flat{background:transparent}
+.muted{color:var(--muted)}
+.small{font-size:.875rem}
+.callout{border:1px solid var(--line);border-left:4px solid var(--accent);background:var(--surface);padding:14px 16px;border-radius:6px;max-width:68ch}
+.callout.warn{border-left-color:var(--warn)}
+.done{background:var(--good-soft);border:1px solid var(--line);border-radius:6px;padding:12px 14px;max-width:68ch}
+.done b{color:var(--good)}
+
+/* contrast block */
+.vs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px}
+.vs .card h3{font-size:1rem}
+.vs .no h3{color:var(--bad)} .vs .yes h3{color:var(--good)}
+.vs ul{margin:0;padding-left:1.1rem;display:grid;gap:4px}
+
+/* case */
+.case{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:820px){.case{grid-template-columns:minmax(0,1fr)}}
+.case .story{display:grid;gap:16px}
+.story .block{display:grid;gap:4px}
+.story .block h3{font-size:.8125rem;font-family:var(--f-mono);font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.score{position:sticky;top:76px;display:grid;gap:14px}
+.kv{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:.9375rem}
+.kv dt{color:var(--muted)} .kv dd{margin:0;text-align:right}
+.cac{display:grid;gap:8px}
+.cacrow{display:grid;grid-template-columns:64px 1fr 64px;align-items:center;gap:10px;font-size:.875rem}
+.cacbar{height:22px;border-radius:4px;background:var(--line);position:relative}
+.cacbar i{position:absolute;inset:0 auto 0 0;border-radius:4px}
+
+/* steps */
+.stepno{font-family:var(--f-mono);font-size:.8125rem;color:var(--accent-ink);background:var(--accent);padding:2px 8px;border-radius:4px;justify-self:start}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.8125rem;border:1px solid var(--line);background:var(--surface);padding:3px 10px;border-radius:999px}
+.formulas{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:8px}
+.formula{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 12px;display:grid;gap:2px}
+.formula span{font-size:.8125rem;color:var(--muted)}
+.formula code{font-family:var(--f-mono);font-size:.875rem}
+
+/* tool shell */
+.tool{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:grid;gap:16px;min-width:0}
+.tool>header{display:grid;gap:4px}
+.tool .tag{color:var(--accent)}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%;font-size:.875rem}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+thead th{font-weight:500;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;background:var(--bg);vertical-align:bottom}
+tbody th{text-align:left;font-weight:500;background:var(--surface);position:sticky;left:0;min-width:190px;white-space:normal}
+tbody th .ch{display:block;font-size:.75rem;color:var(--muted);font-weight:400}
+tfoot th,tfoot td{font-weight:600;background:var(--bg);border-bottom:0}
+tfoot th{position:sticky;left:0}
+td.hl{background:var(--accent-soft)}
+tr:last-child td{border-bottom:0}
+input[type=number],select{font-family:var(--f-mono);font-size:.875rem;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:5px 6px}
+td input[type=number]{width:76px;text-align:right}
+label{font-size:.875rem;color:var(--muted)}
+.field{display:grid;gap:4px;min-width:0}
+.field input[type=number],.field select{width:100%;max-width:240px;padding:8px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px}
+.hint{font-size:.8125rem;color:var(--muted)}
+button{font-family:var(--f-body);font-size:.875rem;font-weight:500;padding:8px 14px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+input[type=range]{width:100%;accent-color:var(--accent)}
+
+/* rank lists */
+.ranks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:16px}
+.rank h3{font-size:.9375rem;margin-bottom:10px}
+.rank ol{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.rk{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:4px 10px;align-items:center}
+.rk .pos{font-family:var(--f-mono);font-size:.8125rem;color:var(--muted)}
+.rk .nm{font-size:.875rem;overflow-wrap:anywhere}
+.rk .val{font-family:var(--f-mono);font-size:.8125rem;text-align:right}
+.rk .bar{grid-column:2 / span 1;height:8px;border-radius:4px;background:var(--accent-soft)}
+.rk .bar i{display:block;height:100%;border-radius:4px;background:var(--accent)}
+.rk .mv{grid-column:3;font-family:var(--f-mono);font-size:.75rem;text-align:right}
+.mv.up{color:var(--good)} .mv.dn{color:var(--bad)} .mv.eq{color:var(--muted)}
+.insight{background:var(--warn-soft);border:1px solid var(--line);border-radius:6px;padding:12px 14px;font-size:.9375rem}
+
+/* tiles */
+.tile{border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:grid;gap:2px;background:var(--bg);min-width:0}
+.tile .k{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.tile .v{font-family:var(--f-mono);font-size:1.25rem;font-weight:500}
+.tile .s{font-family:var(--f-mono);font-size:.8125rem;color:var(--muted)}
+.tile.big .v{font-size:1.5rem}
+.good{color:var(--good)} .bad{color:var(--bad)} .warnc{color:var(--warn)}
+
+/* sliders */
+.sl{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,2fr) 128px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.sl:last-child{border-bottom:0}
+.sl .nm{font-size:.875rem}
+.sl .nm small{display:block;color:var(--muted);font-size:.75rem}
+.sl .out{font-family:var(--f-mono);font-size:.8125rem;text-align:right}
+@media (max-width:640px){.sl{grid-template-columns:minmax(0,1fr) 110px}.sl input[type=range]{grid-column:1 / -1;grid-row:2}}
+
+/* ladder */
+.ladder{display:grid;gap:0;counter-reset:st}
+.rung{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding-bottom:18px;position:relative}
+.rung::before{content:"";position:absolute;left:21px;top:34px;bottom:0;width:2px;background:var(--line)}
+.rung:last-child::before{display:none}
+.rung .dot{width:44px;height:34px;border-radius:6px;background:var(--accent-soft);border:1px solid var(--line);display:grid;place-items:center;font-family:var(--f-mono);font-size:.8125rem;color:var(--accent)}
+.rung h3{font-size:1rem;margin-bottom:2px}
+.rung .gate{margin-top:8px;display:grid;gap:6px}
+
+/* checks */
+.check{display:grid;grid-template-columns:20px minmax(0,1fr);gap:10px;align-items:start;font-size:.9375rem}
+.check input{margin-top:4px;width:16px;height:16px;accent-color:var(--accent)}
+.checks{display:grid;gap:8px}
+.prog{height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.prog i{display:block;height:100%;background:var(--good);width:0;transition:width .2s}
+@media (prefers-reduced-motion:reduce){.prog i{transition:none}html{scroll-behavior:auto}}
+.badge{display:inline-block;font-family:var(--f-mono);font-size:.75rem;padding:2px 8px;border-radius:4px}
+.badge.ok{background:var(--good-soft);color:var(--good)}
+.badge.no{background:var(--bad-soft);color:var(--bad)}
+.badge.warn{background:var(--warn-soft);color:var(--warn)}
+.bm td,.bm th{white-space:normal;text-align:left;vertical-align:top}
+.bm td:nth-child(2){min-width:210px}
+.bm td:nth-child(5){min-width:190px}
+.bm tbody th{min-width:150px}
+.bm .grp th{background:var(--bg);color:var(--muted);font-family:var(--f-mono);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;position:static}
+.sig{display:grid;gap:8px}
+.sigrow{display:grid;grid-template-columns:minmax(0,1fr) 110px auto;gap:10px;align-items:center;font-size:.9375rem}
+.sigrow input{width:100%;text-align:right}
+@media (max-width:520px){.sigrow{grid-template-columns:minmax(0,1fr) 96px}.sigrow .badge{grid-column:1 / -1;justify-self:start}}
+.sigrow.pick{background:var(--accent-soft);border-radius:6px;padding:6px 8px;margin:-6px -8px}
+footer{border-top:1px solid var(--line);padding-top:20px;font-size:.8125rem;color:var(--muted);display:grid;gap:6px}
+</style>
+</head>
+<body>
+<nav class="index" aria-label="Playbook sections">
+  <div class="in">
+    <a href="#problem">The problem</a>
+    <a href="#case">Case</a>
+    <a href="#benchmarks">Benchmarks</a>
+    <a href="#step-1"><b>1</b>Baseline</a>
+    <a href="#step-2"><b>2</b>Signals</a>
+    <a href="#step-3"><b>3</b>Bidding</a>
+    <a href="#step-4"><b>4</b>Reallocate</a>
+    <a href="#checklist">Checklist</a>
+    <a href="#glossary">Glossary</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<header class="hero">
+  <span class="eyebrow">Digital acquisition · Demat accounts · Franchise and Retail</span>
+  <h1>Campaign Budget Playbook</h1>
+  <p class="lede">How to spend a digital acquisition budget on customers who open accounts and trade, not on cheap enquiries. Four steps, one worked case, and calculators you can change to match your own campaigns.</p>
+  <div class="pills">
+    <span class="pill">Worked case: blended CAC <b>₹16K → ₹12K</b></span>
+    <span class="pill">Measured on <b>activated customers</b></span>
+    <span class="pill">Calculators use <b>illustrative numbers</b>. Overwrite them with yours.</span>
+  </div>
+</header>
+
+<!-- THE PROBLEM -->
+<section id="problem">
+  <header>
+    <span class="tag">The problem</span>
+    <h2>More spend can buy weaker leads</h2>
+  </header>
+  <div class="prose">
+    <p>Cost per lead is the easiest number to improve and the easiest to be fooled by. A campaign that brings in enquiries cheaply can still be the most expensive way to get a customer who opens an account and places a trade.</p>
+    <p>The fix is to decide what a good outcome is, give the ad platforms that outcome as a signal, and move money towards what produces it.</p>
+  </div>
+  <div class="vs">
+    <div class="card no">
+      <h3>Optimising for</h3>
+      <ul><li>Lowest cost per lead</li><li>Highest enquiry volume</li><li>Clicks, form fills, CTR</li></ul>
+    </div>
+    <div class="card yes">
+      <h3>Optimising for</h3>
+      <ul><li>Cost per qualified lead, then cost per activated customer</li><li>Share of leads that open an account and place a first trade</li><li>Conversion value and ROAS, once the data is dependable</li></ul>
+    </div>
+  </div>
+</section>
+
+<!-- CASE -->
+<section id="case">
+  <header>
+    <span class="tag">Worked case</span>
+    <h2>How we cut blended CAC while still scaling</h2>
+  </header>
+  <div class="case">
+    <div class="story">
+      <div class="block">
+        <h3>Situation</h3>
+        <p>Digital acquisition for Franchise and Retail ran on a ₹50 Cr budget, with about ₹30 Cr of it in paid media across Google Search, Display and Demand Gen, and Meta. The FY25-26 target was about 1.5 lakh new demat accounts, our share of the company's 4.3 lakh.</p>
+      </div>
+      <div class="block">
+        <h3>What went wrong</h3>
+        <p>When spend was scaled by about 40%, lead quality fell and acquisition cost rose. More money was buying weaker leads.</p>
+      </div>
+      <div class="block">
+        <h3>Diagnosis</h3>
+        <p>We were optimising for cheap enquiries, not for customers who actually opened accounts and traded.</p>
+      </div>
+      <div class="block">
+        <h3>Result</h3>
+        <p>Blended CAC fell from about ₹16K to ₹12K, a reduction of about 25%, while spend kept scaling. It was measured on activated customers, not enquiries, so the saving was real and not a reporting effect.</p>
+      </div>
+    </div>
+    <aside class="card score" aria-label="Case scoreboard">
+      <dl class="kv">
+        <dt>Total budget</dt><dd class="num">₹50 Cr</dd>
+        <dt>Paid media</dt><dd class="num">≈ ₹30 Cr</dd>
+        <dt>Account target</dt><dd class="num">≈ 1.5 lakh</dd>
+        <dt>Company target</dt><dd class="num">4.3 lakh</dd>
+        <dt>DIY share of volume</dt><dd class="num">≈ 7% → 25%</dd>
+      </dl>
+      <div class="cac" role="img" aria-label="Blended CAC before 16 thousand rupees, after 12 thousand rupees">
+        <div class="cacrow"><span>Before</span><div class="cacbar"><i style="width:100%;background:var(--bad)"></i></div><span class="num">₹16K</span></div>
+        <div class="cacrow"><span>After</span><div class="cacbar"><i style="width:75%;background:var(--good)"></i></div><span class="num">₹12K</span></div>
+        <p class="hint">Blended CAC per activated customer, about 25% lower.</p>
+      </div>
+    </aside>
+  </div>
+  <p class="small muted">The four steps below are what we did, in order. Each has a calculator so you can test the same moves on your own numbers.</p>
+</section>
+
+<!-- BENCHMARKS -->
+<section id="benchmarks">
+  <header>
+    <span class="tag">Industry yardsticks</span>
+    <h2>What the market looks like right now</h2>
+  </header>
+  <div class="prose">
+    <p>Use these to sanity-check your own numbers, not to replace them. Figures were retrieved on 27 October 2026. "Reported" means a published figure, "Derived" means we calculated it from published figures, and "Secondary" means a blog or aggregator that does not name its own source.</p>
+  </div>
+  <div class="scroll bm">
+    <table>
+      <thead><tr><th>Measure</th><th>Latest figure</th><th>Period</th><th>Type</th><th>Source</th><th>Use it for</th></tr></thead>
+      <tbody>
+        <tr class="grp"><th colspan="6">Market size and activity</th></tr>
+        <tr><th scope="row">Demat accounts, India</th><td>237.7 million. 3.3 million added in the month, after 2.9 million in July and over 2.5 million in June.</td><td>Aug 2026</td><td><span class="badge ok">Reported</span></td>
+          <td><a href="https://www.businesstoday.in/personal-finance/story/demat-accounts-are-growing-faster-than-active-investors-what-does-it-mean-for-brokerages-554079-2026-09-09" target="_blank" rel="noopener">Business Today</a> · <a href="https://newsable.asianetnews.com/business/demat-account-additions-surge-in-july-2026-reach-234-4-million-articleshow-hykhvbp" target="_blank" rel="noopener">Asianet</a> · <a href="https://www.sahi.com/news/nse-unique-client-codes-hit-26-crore-as-june-demat-additions-bounce-to-2-5-million-3932-PE1_COR" target="_blank" rel="noopener">Sahi</a></td>
+          <td>Sizing the market your target sits in.</td></tr>
+        <tr><th scope="row">FY26 gross demat additions</th><td>NSDL 59.3 lakh (a record) plus CDSL about 2.72 crore, so about 3.3 crore combined.</td><td>FY26</td><td><span class="badge warn">Derived</span></td>
+          <td><a href="https://www.outlookmoney.com/invest/nsdl-adds-59-lakh-demat-accounts-in-fy26-records-highest-ever-annual-expansion" target="_blank" rel="noopener">Outlook Money</a></td>
+          <td>Your 1.5 lakh target is about 0.45% of this, and the company's 4.3 lakh about 1.3%.</td></tr>
+        <tr><th scope="row">NSE active clients</th><td>About 4.6 crore (46 million). At the end of FY26 it was 4.57 crore, down about 7% from 4.92 crore a year earlier.</td><td>Aug 2026, FY26</td><td><span class="badge ok">Reported</span></td>
+          <td><a href="https://oga-prod.angelone.in/news/market-updates/nse-active-clients-down-7-in-fy26-accounts-falls-to-4-57-crore" target="_blank" rel="noopener">Angel One news</a> · <a href="https://www.businesstoday.in/personal-finance/story/demat-accounts-are-growing-faster-than-active-investors-what-does-it-mean-for-brokerages-554079-2026-09-09" target="_blank" rel="noopener">Business Today</a></td>
+          <td>Accounts are growing faster than active clients, which is the case for measuring activation.</td></tr>
+        <tr><th scope="row">Active clients as a share of demat accounts</th><td>19.3% for the industry. Angel One's NSE activation rate was 17%.</td><td>Aug 2026</td><td><span class="badge ok">Reported</span></td>
+          <td><a href="https://www.businesstoday.in/personal-finance/story/demat-accounts-are-growing-faster-than-active-investors-what-does-it-mean-for-brokerages-554079-2026-09-09" target="_blank" rel="noopener">Business Today</a></td>
+          <td>A stock measure across all accounts, so read it as a ceiling check on first-trade rates, not a copy of them.</td></tr>
+        <tr><th scope="row">Share of NSE active clients</th><td>Groww 28.31%, Zerodha 15.08%, Angel One 14.79%. Motilal Oswal showed a marginal decline, with no figure given in the source.</td><td>FY26</td><td><span class="badge ok">Reported</span></td>
+          <td><a href="https://oga-prod.angelone.in/news/market-updates/nse-active-clients-down-7-in-fy26-accounts-falls-to-4-57-crore" target="_blank" rel="noopener">Angel One news</a></td>
+          <td>Who you are competing with for the same searcher.</td></tr>
+        <tr class="grp"><th colspan="6">Acquisition and economics</th></tr>
+        <tr><th scope="row">Angel One gross client additions</th><td>1.80 million in the quarter, then about 1.5 million.</td><td>Q4 FY26, Q2 FY27</td><td><span class="badge ok">Reported</span></td>
+          <td><a href="https://www.arihantcapital.com/company-information/companynewsdetails/25107010049" target="_blank" rel="noopener">Arihant Capital</a> · <a href="https://finance.yahoo.com/markets/stocks/articles/angel-one-ltd-bom-543235-030042177.html" target="_blank" rel="noopener">Yahoo Finance</a></td>
+          <td>Scale of a leading digital broker's quarterly additions.</td></tr>
+        <tr><th scope="row">Groww customer acquisition cost</th><td>₹796 in H1 FY25, ₹1,374 in H1 FY26, then ₹900 in Q3 FY26.</td><td>FY25 to FY26</td><td><span class="badge ok">Reported</span></td>
+          <td><a href="https://www.storyboard18.com/brand-marketing/groww-q2-profit-hits-rs-471-crore-as-customer-acquisition-cost-nearly-doubles-to-rs-1374-84569.htm" target="_blank" rel="noopener">Storyboard18 (H1)</a> · <a href="https://www.storyboard18.com/brand-marketing/groww-cuts-branding-spend-in-q3-fy26-as-customer-acquisition-costs-fall-33-87630.htm" target="_blank" rel="noopener">Storyboard18 (Q3)</a></td>
+          <td>The trend: CAC swings sharply with marketing intensity. The articles do not define the unit.</td></tr>
+        <tr><th scope="row">Angel One revenue per NSE-active client</th><td>About ₹8,600 a year. Q4 FY26 revenue from operations of ₹1,459 Cr, annualised, divided by about 6.76 million active clients (14.79% of 4.57 crore).</td><td>Q4 FY26</td><td><span class="badge warn">Derived</span></td>
+          <td><a href="https://www.arihantcapital.com/company-information/companynewsdetails/25107010049" target="_blank" rel="noopener">Arihant Capital</a> · <a href="https://oga-prod.angelone.in/news/market-updates/nse-active-clients-down-7-in-fy26-accounts-falls-to-4-57-crore" target="_blank" rel="noopener">Angel One news</a></td>
+          <td>Default value per customer in the ROAS calculator. Includes every revenue line, from a discount-led base.</td></tr>
+        <tr><th scope="row">Angel One direct vs assisted channel</th><td>Net broking income split roughly 75 : 25 between the direct and assisted (authorised partner) channels.</td><td>Q2 FY27</td><td><span class="badge ok">Reported</span></td>
+          <td><a href="https://finance.yahoo.com/markets/stocks/articles/angel-one-ltd-bom-543235-030042177.html" target="_blank" rel="noopener">Yahoo Finance</a></td>
+          <td>A reference for channel mix. It is a share of income, not of accounts.</td></tr>
+        <tr class="grp"><th colspan="6">Funnel and search ads</th></tr>
+        <tr><th scope="row">Sign-up to KYC completion</th><td>About 60% to 70% at leading Indian trading apps.</td><td>Not dated</td><td><span class="badge warn">Secondary</span></td>
+          <td><a href="https://www.piyushwadhwa.com/writing/fintech-onboarding-kyc-dropoff" target="_blank" rel="noopener">Fintech onboarding blog</a></td>
+          <td>Rough check on your lead-to-account drop-off. The blog names no primary report.</td></tr>
+        <tr><th scope="row">KYC completers who never trade</th><td>About 20% to 30%.</td><td>Not dated</td><td><span class="badge warn">Secondary</span></td>
+          <td><a href="https://www.piyushwadhwa.com/writing/fintech-onboarding-kyc-dropoff" target="_blank" rel="noopener">Fintech onboarding blog</a></td>
+          <td>Rough check on your account-to-first-trade rate. The blog's own synthesis.</td></tr>
+        <tr><th scope="row">Search ads, finance and insurance</th><td>Median cost per click $3.39, conversion rate 2.64%, cost per lead $74.44. Finance had the lowest conversion rate of 23 industries.</td><td>Apr 2025 to Mar 2026</td><td><span class="badge ok">Reported</span></td>
+          <td><a href="https://www.wordstream.com/blog/2026-google-ads-benchmarks" target="_blank" rel="noopener">WordStream</a></td>
+          <td>Ratios only. Based on 13,474 US campaigns, in US dollars, so do not use it for rupee targets.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="callout warn small">Digital-first brokers report ₹900 to ₹1,400 per customer, while the case above reports ₹12K to ₹16K per activated customer. They count different things (a new customer versus a customer who opened and traded, and likely different cost scopes) and run different models (app-led versus franchise and relationship-manager assisted). Compare trends and ratios, not the rupee figures.</p>
+</section>
+
+<!-- STEP 1 -->
+<section id="step-1">
+  <header>
+    <span class="stepno">Step 1</span>
+    <h2>Set the baseline</h2>
+  </header>
+  <div class="prose">
+    <p>Split performance by campaign, keyword, audience, lead source and customer segment. For each slice, record the five numbers below. They show where money is producing customers and where it is producing noise.</p>
+  </div>
+  <div class="chips" aria-label="Dimensions to split by">
+    <span class="chip">Campaign</span><span class="chip">Keyword</span><span class="chip">Audience</span><span class="chip">Lead source</span><span class="chip">Customer segment</span>
+  </div>
+  <div class="formulas">
+    <div class="formula"><span>Cost per lead (CPL)</span><code>spend ÷ leads</code></div>
+    <div class="formula"><span>Qualification rate</span><code>qualified leads ÷ leads</code></div>
+    <div class="formula"><span>Account-opening rate</span><code>accounts opened ÷ qualified leads</code></div>
+    <div class="formula"><span>First-trade rate</span><code>first trades ÷ accounts opened</code></div>
+    <div class="formula"><span>Cost per activated customer</span><code>spend ÷ first trades</code></div>
+  </div>
+
+  <div class="tool" id="scorecard">
+    <header>
+      <span class="tag">Calculator · Funnel scorecard</span>
+      <h3>Which campaigns produce customers, and which produce noise?</h3>
+      <p class="small muted">Example rows are illustrative. Edit any white cell. Everything below, including the later steps, updates from this table.</p>
+    </header>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align:left">Campaign</th>
+            <th>Spend (₹ L)</th><th>Leads</th><th>Lead → qualified %</th><th>Qualified → account %</th><th>Account → first trade %</th>
+            <th>Cost / lead</th><th>Cost / qualified</th><th>Cost / account</th><th>Cost / activated</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+        <tfoot>
+          <tr id="totals"></tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="insight" id="insight" role="status"></div>
+    <div class="ranks">
+      <div class="rank"><h3>Ranked by cost per lead (cheapest first)</h3><ol id="rankLead"></ol></div>
+      <div class="rank"><h3>Ranked by cost per activated customer</h3><ol id="rankAct"></ol></div>
+    </div>
+    <p class="hint">Arrows on the right show how far each campaign moves when you rank by activated customers instead of leads. ▼ means it looked better on leads than it really is.</p>
+    <p class="hint">Yardstick: about 19% of all demat accounts were NSE-active in August 2026, and Angel One's activation was 17%. Newly opened accounts should trade at a higher rate than that, but if yours sit far below it, check your account-opened and first-trade counts first. See <a href="#benchmarks">Benchmarks</a>.</p>
+  </div>
+  <div class="done"><b>Done when</b> every campaign has all five numbers, from the same date range, and someone outside the marketing team agrees the account-opened and first-trade counts match the back office.</div>
+</section>
+
+<!-- STEP 2 -->
+<section id="step-2">
+  <header>
+    <span class="stepno">Step 2</span>
+    <h2>Fix the conversion signals</h2>
+  </header>
+  <div class="prose">
+    <p>Ad platforms optimise for whatever conversion you give them. If that is a form fill, they find more form fills. Connect Google Ads (and Meta) to the CRM and to the account-opening and trading events, so the system learns who qualified, who opened and who traded.</p>
+    <ul>
+      <li>Capture the click ID (GCLID on Google, the click and browser IDs on Meta) when the lead arrives, and store it on the lead record in the CRM.</li>
+      <li>When the lead status changes in the CRM, back office or trading platform, send that event back to the ad platform against the same click.</li>
+      <li>Report each event under its own name, so you can see cost per qualified lead as well as cost per activated customer.</li>
+    </ul>
+  </div>
+  <div class="scroll">
+    <table>
+      <thead><tr><th style="text-align:left">Signal</th><th style="text-align:left">Where it lives</th><th style="text-align:left">Speed</th><th style="text-align:left">Role in bidding</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Lead submitted</th><td style="text-align:left;white-space:normal">Website or lead form</td><td style="text-align:left">Instant</td><td style="text-align:left;white-space:normal">Reporting only. Do not optimise for it.</td></tr>
+        <tr><th scope="row">Qualified lead</th><td style="text-align:left;white-space:normal">CRM status</td><td style="text-align:left">Hours to days</td><td style="text-align:left;white-space:normal">First bidding target. Fast, and filters out noise.</td></tr>
+        <tr><th scope="row">Account opened</th><td style="text-align:left;white-space:normal">Onboarding or KYC system</td><td style="text-align:left">Days</td><td style="text-align:left;white-space:normal">Intermediate target when trades are too few.</td></tr>
+        <tr><th scope="row">First trade (activated)</th><td style="text-align:left;white-space:normal">Trading platform</td><td style="text-align:left">Days to weeks</td><td style="text-align:left;white-space:normal">Best target. Carries a value for ROAS bidding.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="callout warn small">Send only consented, hashed customer identifiers, and confirm the setup with your data-protection and compliance teams before turning it on. Check the current Google Ads and Meta documentation for the exact import method and requirements.</p>
+
+  <div class="tool" id="signal">
+    <header>
+      <span class="tag">Calculator · Signal picker</span>
+      <h3>Which event should this campaign optimise for?</h3>
+      <p class="small muted">Deeper events are better signals but arrive in smaller numbers. Enter this campaign's monthly volume for each event. The picker chooses the deepest event that clears your minimum.</p>
+    </header>
+    <div class="fields">
+      <div class="field"><label for="minConv">Minimum monthly conversions needed</label><input type="number" id="minConv" value="30" min="1"><span class="hint">A rule of thumb, not a Google rule. Check the current guidance for your bid strategy.</span></div>
+    </div>
+    <div class="sig" id="sigList"></div>
+    <div class="insight" id="sigOut" role="status"></div>
+  </div>
+  <div class="done"><b>Done when</b> a test lead can be followed from ad click to first trade, and the same event shows up in the ad platform under its own name within the expected delay.</div>
+</section>
+
+<!-- STEP 3 -->
+<section id="step-3">
+  <header>
+    <span class="stepno">Step 3</span>
+    <h2>Move bidding up in stages</h2>
+  </header>
+  <div class="prose">
+    <p>Each stage needs the one before it to be reliable. Start with target CPA on an event you can trust, then test value-based bidding once conversion values and data quality hold up. Track cost per activated customer, conversion value and ROAS throughout.</p>
+  </div>
+  <div class="ladder">
+    <div class="rung"><div class="dot">A</div><div>
+      <h3>Clean data, no bid change</h3>
+      <p class="small muted">Let the new events accumulate under the existing strategy. Compare the platform's numbers with the CRM.</p>
+      <div class="gate"><label class="check"><input type="checkbox" data-ck="s3a"><span>Platform and CRM counts agree within a tolerance you set</span></label></div>
+    </div></div>
+    <div class="rung"><div class="dot">B</div><div>
+      <h3>Target CPA on qualified lead</h3>
+      <p class="small muted">Start the target near what you pay today, then tighten in steps as results hold.</p>
+      <div class="gate"><label class="check"><input type="checkbox" data-ck="s3b"><span>Enough qualified-lead conversions per campaign (see the signal picker)</span></label></div>
+    </div></div>
+    <div class="rung"><div class="dot">C</div><div>
+      <h3>Target CPA on activated customer</h3>
+      <p class="small muted">Move to the deepest event with enough volume. Pool low-volume campaigns if you need to.</p>
+      <div class="gate"><label class="check"><input type="checkbox" data-ck="s3c"><span>Cost per activated customer is stable week to week</span></label></div>
+    </div></div>
+    <div class="rung"><div class="dot">D</div><div>
+      <h3>Value-based bidding and target ROAS</h3>
+      <p class="small muted">Give each activated customer a value, agreed with Finance, and let the system bid for the more valuable ones.</p>
+      <div class="gate"><label class="check"><input type="checkbox" data-ck="s3d"><span>Conversion values are dependable and approved by Finance</span></label></div>
+    </div></div>
+  </div>
+
+  <div class="tool" id="bidtool">
+    <header>
+      <span class="tag">Calculator · Target translator</span>
+      <h3>Turn a cost-per-customer goal into a bid target</h3>
+      <p class="small muted">Uses the funnel rates from your scorecard in Step 1.</p>
+    </header>
+    <div class="fields">
+      <div class="field"><label for="tgt">Target cost per activated customer (₹)</label><input type="number" id="tgt" value="12000" min="0" step="500"></div>
+      <div class="field"><label for="evt">Bid on this event</label>
+        <select id="evt"><option value="q">Qualified lead</option><option value="o">Account opened</option><option value="a">Activated (first trade)</option></select></div>
+      <div class="field"><label for="room">Starting headroom over today's cost (%)</label><input type="number" id="room" value="15" min="0" max="100"><span class="hint">Setting the first target at today's cost plus a margin avoids starving the campaign.</span></div>
+    </div>
+    <div class="grid3">
+      <div class="tile"><span class="k">Today's cost per event</span><span class="v" id="bCur">–</span><span class="s" id="bCurS"></span></div>
+      <div class="tile big"><span class="k">Starting target</span><span class="v" id="bStart">–</span><span class="s">today + headroom</span></div>
+      <div class="tile big"><span class="k">Goal target</span><span class="v" id="bGoal">–</span><span class="s" id="bGoalS"></span></div>
+    </div>
+    <p class="small" id="bNote"></p>
+    <hr style="border:0;border-top:1px solid var(--line);width:100%;margin:0">
+    <div class="fields">
+      <div class="field"><label for="ann">Revenue per activated customer, per year (₹)</label><input type="number" id="ann" value="8600" min="0" step="100"><span class="hint">Default is the Angel One figure derived in <a href="#benchmarks">Benchmarks</a>. A full-service franchise network may earn more per client. Use a figure agreed with Finance.</span></div>
+      <div class="field"><label for="yrs">Years of value to count</label><input type="number" id="yrs" value="1" min="0.5" step="0.5"><span class="hint">Finance decides how many years of revenue a new customer is worth.</span></div>
+    </div>
+    <div class="grid3">
+      <div class="tile big"><span class="k">Target ROAS</span><span class="v" id="roas">–</span><span class="s">value counted ÷ target cost</span></div>
+      <div class="tile"><span class="k">Payback</span><span class="v" id="payback">–</span><span class="s">target cost ÷ yearly revenue</span></div>
+      <div class="tile"><span class="k">Reads as</span><span class="v" style="font-size:1rem" id="roasR">–</span></div>
+    </div>
+  </div>
+  <div class="done"><b>Done when</b> the campaign hits its target on the deepest event with enough volume, for several weeks in a row, before you move up a stage.</div>
+</section>
+
+<!-- STEP 4 -->
+<section id="step-4">
+  <header>
+    <span class="stepno">Step 4</span>
+    <h2>Reallocate towards quality</h2>
+  </header>
+  <div class="prose">
+    <p>Shift spend towards the campaigns and segments that produce higher-quality customers, not the ones that are merely cheaper per enquiry. In parallel, grow the self-serve (DIY) channel so growth does not depend on relationship-manager capacity.</p>
+    <ul>
+      <li>Move budget in steps, then wait for results before the next move.</li>
+      <li>Expect diminishing returns. Extra spend on one campaign usually converts worse than the average.</li>
+      <li>Judge every move on cost per activated customer.</li>
+    </ul>
+  </div>
+
+  <div class="tool" id="sim">
+    <header>
+      <span class="tag">Calculator · Reallocation simulator</span>
+      <h3>What happens to blended CAC when you move the money?</h3>
+      <p class="small muted">Uses the campaigns from Step 1. A deliberately simple model: customers from a campaign scale with spend raised to the power set below.</p>
+    </header>
+    <div class="field" style="max-width:520px">
+      <label for="elas">Return on extra spend: <span class="num" id="elasV">0.80</span></label>
+      <input type="range" id="elas" min="0.5" max="1" step="0.05" value="0.8">
+      <span class="hint">1.00 means every extra rupee converts as well as the average. Lower means extra spend converts worse, and cuts lose less than proportionally.</span>
+    </div>
+    <div class="btns">
+      <button type="button" id="pScale">Scale everything +40%</button>
+      <button type="button" id="pShift" class="primary">Same budget, shift to best</button>
+      <button type="button" id="pReset">Reset</button>
+    </div>
+    <div id="sliders"></div>
+    <div class="grid3" id="simTiles"></div>
+    <p class="small" id="simNote"></p>
+  </div>
+
+  <div class="tool" id="diy">
+    <header>
+      <span class="tag">Calculator · DIY channel mix</span>
+      <h3>Grow volume without adding relationship managers</h3>
+      <p class="small muted">Illustrative inputs. Replace them with your assisted and self-serve costs.</p>
+    </header>
+    <div class="fields">
+      <div class="field"><label for="dMon">Activations needed per month</label><input type="number" id="dMon" value="12500" min="0" step="500"><span class="hint">1.5 lakh a year ÷ 12 ≈ 12,500</span></div>
+      <div class="field"><label for="dAs">RM-assisted cost per activation (₹)</label><input type="number" id="dAs" value="14000" min="0" step="500"></div>
+      <div class="field"><label for="dDiy">DIY cost per activation (₹)</label><input type="number" id="dDiy" value="8000" min="0" step="500"><span class="hint">Your own figure. No public per-channel cost exists. Groww reported ₹900 to ₹1,374 per customer in FY26, on an undefined basis.</span></div>
+      <div class="field"><label for="dCap">Activations one RM handles per month</label><input type="number" id="dCap" value="40" min="1"><span class="hint">Your own figure from RM productivity data.</span></div>
+      <div class="field"><label for="dFrom">DIY share today (%)</label><input type="number" id="dFrom" value="7" min="0" max="100"></div>
+    </div>
+    <div class="field" style="max-width:520px">
+      <label for="dTo">DIY share target: <span class="num" id="dToV">25%</span></label>
+      <input type="range" id="dTo" min="0" max="100" step="1" value="25">
+    </div>
+    <div class="grid3" id="diyTiles"></div>
+  </div>
+  <div class="done"><b>Done when</b> the reallocated mix beats the old one on cost per activated customer, and the DIY share is rising without lowering the quality of accounts opened.</div>
+</section>
+
+<!-- CHECKLIST -->
+<section id="checklist">
+  <header>
+    <span class="tag">Checklist</span>
+    <h2>Run it on your own campaigns</h2>
+    <p class="small muted">Ticks are saved in this browser only.</p>
+  </header>
+  <div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-label="Checklist progress" id="progBar"><i id="prog"></i></div>
+  <p class="small num" id="progTxt"></p>
+  <div class="grid2">
+    <div class="card"><h3>1 · Baseline</h3><div class="checks">
+      <label class="check"><input type="checkbox" data-ck="c1a"><span>Performance split by campaign, keyword, audience, lead source and segment</span></label>
+      <label class="check"><input type="checkbox" data-ck="c1b"><span>CPL, qualification, account-opening and first-trade rates captured</span></label>
+      <label class="check"><input type="checkbox" data-ck="c1c"><span>Cost per activated customer calculated for every campaign</span></label>
+    </div></div>
+    <div class="card"><h3>2 · Signals</h3><div class="checks">
+      <label class="check"><input type="checkbox" data-ck="c2a"><span>Click ID stored on every lead record</span></label>
+      <label class="check"><input type="checkbox" data-ck="c2b"><span>Qualified, account-opened and first-trade events sent back to the ad platforms</span></label>
+      <label class="check"><input type="checkbox" data-ck="c2c"><span>Consent, hashing and compliance reviewed</span></label>
+    </div></div>
+    <div class="card"><h3>3 · Bidding</h3><div class="checks">
+      <label class="check"><input type="checkbox" data-ck="c3a"><span>Target CPA live on a reliable event</span></label>
+      <label class="check"><input type="checkbox" data-ck="c3b"><span>Targets tightened in steps, not in one jump</span></label>
+      <label class="check"><input type="checkbox" data-ck="c3c"><span>Conversion values agreed with Finance before testing target ROAS</span></label>
+    </div></div>
+    <div class="card"><h3>4 · Reallocation</h3><div class="checks">
+      <label class="check"><input type="checkbox" data-ck="c4a"><span>Budget moved towards campaigns with the lowest cost per activated customer</span></label>
+      <label class="check"><input type="checkbox" data-ck="c4b"><span>DIY share target set, with a plan that does not depend on RM capacity</span></label>
+      <label class="check"><input type="checkbox" data-ck="c4c"><span>Results reviewed on activated customers, not enquiries</span></label>
+    </div></div>
+  </div>
+</section>
+
+<!-- GLOSSARY -->
+<section id="glossary">
+  <header><span class="tag">Glossary</span><h2>Terms used here</h2></header>
+  <div class="grid2">
+    <div class="card flat"><h3>Blended CAC</h3><p class="small">Total acquisition spend divided by total activated customers, across all channels.</p></div>
+    <div class="card flat"><h3>Activated customer</h3><p class="small">A customer who opened an account and placed a first trade.</p></div>
+    <div class="card flat"><h3>Target CPA</h3><p class="small">A bid strategy that aims for an average cost per chosen conversion event.</p></div>
+    <div class="card flat"><h3>Target ROAS</h3><p class="small">A value-based strategy that aims for a return, as conversion value divided by spend.</p></div>
+    <div class="card flat"><h3>Demand Gen</h3><p class="small">Google's campaign type for discovery-style ads across its visual surfaces.</p></div>
+    <div class="card flat"><h3>DIY channel</h3><p class="small">Self-serve account opening, with no relationship manager involved.</p></div>
+  </div>
+  <footer>
+    <p>Case figures are as reported by the team. Benchmark figures were retrieved on 27 October 2026 from the sources linked in the Benchmarks table.</p>
+    <p>Still illustrative, to be replaced with your own data: the six example campaigns and their funnel rates, RM capacity, DIY cost per activation and the assisted cost per activation.</p>
+  </footer>
+</section>
+
+</div>
+
+<script>
+(function(){
+  /* ---------- helpers ---------- */
+  var inr = function(n){ return isFinite(n) ? '₹' + Math.round(n).toLocaleString('en-IN') : '–'; };
+  var num = function(n){ return isFinite(n) ? Math.round(n).toLocaleString('en-IN') : '–'; };
+  var spendFmt = function(r){ return r >= 1e7 ? '₹' + (r/1e7).toFixed(2) + ' Cr' : '₹' + (r/1e5).toFixed(1) + ' L'; };
+  var pct = function(n,d){ return isFinite(n) ? (n>0?'+':'') + n.toFixed(d==null?1:d) + '%' : '–'; };
+  var $ = function(id){ return document.getElementById(id); };
+  var val = function(id){ var v = parseFloat($(id).value); return isFinite(v) ? v : 0; };
+  var esc = function(s){ return String(s).replace(/[&<>]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c]; }); };
+
+  /* ---------- example campaigns (illustrative) ---------- */
+  var D = [
+    {n:'Search · Open demat account', ch:'Google Search', spend:30, leads:2400, qual:52, open:48, trade:62},
+    {n:'Search · Broad generic terms', ch:'Google Search', spend:25, leads:4200, qual:30, open:30, trade:45},
+    {n:'Display · Audience expansion', ch:'Google Display', spend:15, leads:6000, qual:14, open:25, trade:35},
+    {n:'Demand Gen · Investor interests', ch:'Google Demand Gen', spend:20, leads:5000, qual:22, open:35, trade:50},
+    {n:'Meta · Instant lead form', ch:'Meta', spend:22, leads:9000, qual:12, open:30, trade:40},
+    {n:'Meta · Lookalike of traders', ch:'Meta', spend:18, leads:3500, qual:28, open:40, trade:55}
+  ];
+  var KEYS = ['spend','leads','qual','open','trade'];
+
+  function calc(c){
+    var s = c.spend*1e5, q = c.leads*c.qual/100, o = q*c.open/100, a = o*c.trade/100;
+    return {s:s, l:c.leads, q:q, o:o, a:a, cpl:s/c.leads, cpq:s/q, cpo:s/o, cpa:s/a};
+  }
+  function totals(){
+    var t = {s:0,l:0,q:0,o:0,a:0};
+    D.forEach(function(c){ var k = calc(c); t.s+=k.s; t.l+=k.l; t.q+=k.q; t.o+=k.o; t.a+=k.a; });
+    t.cpl=t.s/t.l; t.cpq=t.s/t.q; t.cpo=t.s/t.o; t.cpa=t.s/t.a;
+    return t;
+  }
+
+  /* ---------- scorecard table ---------- */
+  var tb = $('rows');
+  D.forEach(function(c,i){
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<th scope="row"><span>'+esc(c.n)+'</span><span class="ch">'+esc(c.ch)+'</span></th>' +
+      KEYS.map(function(k){
+        var step = k==='spend' ? '0.5' : (k==='leads' ? '50' : '1');
+        var max = (k==='qual'||k==='open'||k==='trade') ? ' max="100"' : '';
+        return '<td><input type="number" id="in-'+k+'-'+i+'" data-i="'+i+'" data-k="'+k+'" value="'+c[k]+'" min="0"'+max+' step="'+step+'" aria-label="'+esc(c.n)+' '+k+'"></td>';
+      }).join('') +
+      '<td class="num" data-o="cpl"></td><td class="num" data-o="cpq"></td><td class="num" data-o="cpo"></td><td class="num hl" data-o="cpa"></td>';
+    tb.appendChild(tr);
+  });
+  tb.addEventListener('input', function(e){
+    var t = e.target; if(!t.dataset || !t.dataset.k) return;
+    D[+t.dataset.i][t.dataset.k] = parseFloat(t.value) || 0;
+    updateAll();
+  });
+
+  function rankHTML(items, key, fmtv, other){
+    var max = Math.max.apply(null, items.map(function(x){ return x.k[key]; }));
+    return items.map(function(x, idx){
+      var w = max > 0 ? Math.max(4, x.k[key]/max*100) : 0;
+      var mv = '';
+      if(other){
+        var d = idx - other[x.i];
+        mv = d>0 ? '<span class="mv dn">▼ '+d+'</span>' : d<0 ? '<span class="mv up">▲ '+(-d)+'</span>' : '<span class="mv eq">= same</span>';
+      }
+      return '<li class="rk"><span class="pos">'+(idx+1)+'</span><span class="nm">'+esc(D[x.i].n)+'</span><span class="val">'+fmtv(x.k[key])+'</span>' +
+        '<span class="bar"><i style="width:'+w+'%"></i></span>'+mv+'</li>';
+    }).join('');
+  }
+
+  function updateScorecard(){
+    var rowsEl = tb.children;
+    var ks = D.map(calc);
+    ks.forEach(function(k,i){
+      var cells = rowsEl[i].querySelectorAll('[data-o]');
+      cells.forEach(function(td){ td.textContent = inr(k[td.dataset.o]); });
+    });
+    var t = totals();
+    $('totals').innerHTML = '<th scope="row" style="text-align:left">Blended total</th><td class="num">'+spendFmt(t.s)+'</td><td class="num">'+num(t.l)+'</td><td class="num">'+(t.q/t.l*100).toFixed(0)+'%</td><td class="num">'+(t.o/t.q*100).toFixed(0)+'%</td><td class="num">'+(t.a/t.o*100).toFixed(0)+'%</td><td class="num">'+inr(t.cpl)+'</td><td class="num">'+inr(t.cpq)+'</td><td class="num">'+inr(t.cpo)+'</td><td class="num">'+inr(t.cpa)+'</td>';
+
+    var valid = ks.map(function(k,i){ return {i:i,k:k}; }).filter(function(x){ return isFinite(x.k.cpl) && isFinite(x.k.cpa); });
+    var byL = valid.slice().sort(function(a,b){ return a.k.cpl - b.k.cpl; });
+    var byA = valid.slice().sort(function(a,b){ return a.k.cpa - b.k.cpa; });
+    var posL = {}; byL.forEach(function(x,idx){ posL[x.i] = idx; });
+    $('rankLead').innerHTML = rankHTML(byL, 'cpl', inr, null);
+    $('rankAct').innerHTML = rankHTML(byA, 'cpa', inr, posL);
+    if(byL.length){
+      var cheap = byL[0], best = byA[0];
+      $('insight').innerHTML = cheap.i === best.i
+        ? '<b>'+esc(D[best.i].n)+'</b> is cheapest on both measures here. Try changing the rates to see how the ranking can flip.'
+        : '<b>'+esc(D[cheap.i].n)+'</b> has the lowest cost per lead ('+inr(cheap.k.cpl)+') but costs '+inr(cheap.k.cpa)+' per activated customer, about '+(cheap.k.cpa/best.k.cpa).toFixed(1)+'× the best campaign, <b>'+esc(D[best.i].n)+'</b> ('+inr(best.k.cpa)+').';
+    } else { $('insight').textContent = 'Enter spend, leads and rates above to see the ranking.'; }
+  }
+
+  /* ---------- step 2: signal picker ---------- */
+  var SIG = [
+    {k:'l', n:'Lead submitted', v:6000},
+    {k:'q', n:'Qualified lead', v:1500},
+    {k:'o', n:'Account opened', v:520},
+    {k:'a', n:'Activated (first trade)', v:24}
+  ];
+  var sl = $('sigList');
+  SIG.forEach(function(s){
+    var d = document.createElement('div'); d.className = 'sigrow'; d.id = 'sr-'+s.k;
+    d.innerHTML = '<label for="sv-'+s.k+'">'+s.n+'</label><input type="number" id="sv-'+s.k+'" value="'+s.v+'" min="0"><span class="badge" id="sb-'+s.k+'"></span>';
+    sl.appendChild(d);
+  });
+  function updateSignal(){
+    var min = val('minConv'), pick = null;
+    SIG.forEach(function(s){
+      var v = val('sv-'+s.k), ok = v >= min;
+      var b = $('sb-'+s.k); b.textContent = ok ? 'enough' : 'too few'; b.className = 'badge ' + (ok ? 'ok' : 'no');
+      $('sr-'+s.k).classList.remove('pick');
+      if(ok && s.k !== 'l') pick = s;
+    });
+    if(pick){
+      $('sr-'+pick.k).classList.add('pick');
+      $('sigOut').innerHTML = 'Optimise this campaign for <b>'+pick.n+'</b>. It is the deepest event with at least '+num(min)+' conversions a month.' + (pick.k !== 'a' ? ' Keep sending first-trade events too, so you can move deeper as volume grows or pool campaigns.' : '');
+    } else {
+      $('sigOut').innerHTML = 'No event past the enquiry clears '+num(min)+' a month. Pool similar campaigns, or lengthen the time window, before you move off enquiry-based bidding.';
+    }
+  }
+  $('signal').addEventListener('input', updateSignal);
+
+  /* ---------- step 3: target translator ---------- */
+  function updateBid(){
+    var t = totals(), ev = $('evt').value, goal = val('tgt'), room = val('room');
+    var rate = ev==='q' ? t.a/t.q : ev==='o' ? t.a/t.o : 1;
+    var cur = ev==='q' ? t.cpq : ev==='o' ? t.cpo : t.cpa;
+    var names = {q:'qualified lead', o:'account opened', a:'activated customer'};
+    $('bCur').textContent = inr(cur);
+    $('bCurS').textContent = 'per ' + names[ev] + ', blended';
+    $('bStart').textContent = inr(cur*(1+room/100));
+    $('bGoal').textContent = inr(goal*rate);
+    $('bGoalS').textContent = ev==='a' ? 'same as the goal' : (rate*100).toFixed(1)+'% of these become activated';
+    var curA = t.cpa;
+    $('bNote').textContent = goal >= curA
+      ? 'Your goal is at or above today\'s blended cost per activated customer ('+inr(curA)+'), so the goal target is easy to reach. Consider a lower goal.'
+      : 'Move from the starting target towards the goal target in steps, and wait for results after each change. Today\'s blended cost per activated customer is '+inr(curA)+', and your goal is '+(((curA-goal)/curA)*100).toFixed(0)+'% lower.';
+    var ann = val('ann'), yrs = Math.max(0.5, val('yrs')), v = ann*yrs, r = goal>0 ? v/goal*100 : NaN;
+    $('roas').textContent = isFinite(r) ? r.toFixed(0)+'%' : '–';
+    $('payback').textContent = ann>0 ? (goal/ann).toFixed(1)+' yrs' : '–';
+    $('roasR').textContent = !isFinite(r) ? '–' : r < 100 ? 'Below 100%: the value counted does not repay the cost of winning the customer.' : 'Each ₹1 of spend returns about ₹'+(r/100).toFixed(2)+' of value.';
+    $('roasR').className = isFinite(r) && r < 100 ? 'warnc' : '';
+  }
+  $('bidtool').addEventListener('input', updateBid);
+
+  /* ---------- step 4: reallocation ---------- */
+  var dl = D.map(function(){ return 0; });
+  var slEl = $('sliders');
+  D.forEach(function(c,i){
+    var d = document.createElement('div'); d.className = 'sl';
+    d.innerHTML = '<div class="nm">'+esc(c.n)+'<small id="sn-'+i+'"></small></div><input type="range" id="sd-'+i+'" data-i="'+i+'" min="-80" max="100" step="1" value="0" aria-label="Change in spend for '+esc(c.n)+'"><div class="out" id="so-'+i+'"></div>';
+    slEl.appendChild(d);
+  });
+  slEl.addEventListener('input', function(e){
+    var t = e.target; if(t.dataset.i == null) return;
+    dl[+t.dataset.i] = parseFloat(t.value) || 0; updateSim();
+  });
+  $('elas').addEventListener('input', updateSim);
+
+  function updateSim(){
+    var E = val('elas'); $('elasV').textContent = E.toFixed(2);
+    var S0=0,A0=0,S1=0,A1=0;
+    D.forEach(function(c,i){
+      var k = calc(c), f = 1 + dl[i]/100;
+      S0 += k.s; A0 += k.a; S1 += k.s*f; A1 += k.a*Math.pow(f,E);
+      $('sn-'+i).textContent = 'now ' + inr(k.cpa) + ' per activated';
+      $('so-'+i).innerHTML = (dl[i]>0?'+':'') + dl[i].toFixed(0) + '%<br>' + spendFmt(k.s*f);
+    });
+    var c0 = S0/A0, c1 = S1/A1, dC = (c1/c0-1)*100, dS = (S1/S0-1)*100, dA = (A1/A0-1)*100;
+    var cls = function(x, goodWhenDown){ return Math.abs(x) < 0.05 ? '' : ((x<0) === goodWhenDown ? 'good' : 'bad'); };
+    $('simTiles').innerHTML =
+      '<div class="tile"><span class="k">Total spend</span><span class="v">'+spendFmt(S1)+'</span><span class="s">was '+spendFmt(S0)+' · '+pct(dS)+'</span></div>' +
+      '<div class="tile"><span class="k">Activated customers</span><span class="v">'+num(A1)+'</span><span class="s">was '+num(A0)+' · <span class="'+cls(dA,false)+'">'+pct(dA)+'</span></span></div>' +
+      '<div class="tile big"><span class="k">Blended cost per activated</span><span class="v">'+inr(c1)+'</span><span class="s">was '+inr(c0)+' · <span class="'+cls(dC,true)+'">'+pct(dC)+'</span></span></div>';
+    $('simNote').textContent = Math.abs(dS) < 0.5
+      ? 'Budget is unchanged, so any change in cost per activated customer comes from the mix alone.'
+      : (dS > 0 ? 'Budget is up '+dS.toFixed(0)+'%. Compare the extra customers with the extra spend, not only the new blended cost.' : 'Budget is down '+(-dS).toFixed(0)+'%.');
+  }
+  function setSliders(arr){
+    arr.forEach(function(v,i){ dl[i] = v; $('sd-'+i).value = v; });
+    updateSim();
+  }
+  $('pReset').addEventListener('click', function(){ setSliders(D.map(function(){return 0;})); });
+  $('pScale').addEventListener('click', function(){ setSliders(D.map(function(){return 40;})); });
+  $('pShift').addEventListener('click', function(){
+    var ks = D.map(calc).map(function(k,i){ return {i:i,k:k}; }).filter(function(x){ return isFinite(x.k.cpa); }).sort(function(a,b){ return a.k.cpa-b.k.cpa; });
+    var arr = D.map(function(){return 0;});
+    if(ks.length < 4){ setSliders(arr); return; }
+    var worst = ks.slice(-2), best = ks.slice(0,2), freed = 0;
+    worst.forEach(function(x){ arr[x.i] = -30; freed += x.k.s*0.3; });
+    best.forEach(function(x){ arr[x.i] = Math.round(freed/2/x.k.s*1000)/10; if(arr[x.i] > 100) arr[x.i] = 100; });
+    setSliders(arr);
+  });
+
+  /* ---------- DIY mix ---------- */
+  function updateDiy(){
+    var m = val('dMon'), as = val('dAs'), di = val('dDiy'), cap = Math.max(1,val('dCap')), from = val('dFrom'), to = val('dTo');
+    $('dToV').textContent = to + '%';
+    var blend = function(sh){ return sh/100*di + (1-sh/100)*as; };
+    var rms = function(sh){ return m*(1-sh/100)/cap; };
+    var b0 = blend(from), b1 = blend(to), r0 = rms(from), r1 = rms(to);
+    var dB = (b1/b0-1)*100;
+    $('diyTiles').innerHTML =
+      '<div class="tile big"><span class="k">Blended cost per activation</span><span class="v">'+inr(b1)+'</span><span class="s">at '+from+'% DIY: '+inr(b0)+' · <span class="'+(Math.abs(dB)<0.05?'':(dB<0?'good':'bad'))+'">'+pct(dB)+'</span></span></div>' +
+      '<div class="tile"><span class="k">RM-handled activations a month</span><span class="v">'+num(m*(1-to/100))+'</span><span class="s">at '+from+'% DIY: '+num(m*(1-from/100))+'</span></div>' +
+      '<div class="tile"><span class="k">RMs needed</span><span class="v">'+num(Math.ceil(r1))+'</span><span class="s">at '+from+'% DIY: '+num(Math.ceil(r0))+'</span></div>';
+  }
+  $('diy').addEventListener('input', updateDiy);
+
+  /* ---------- checklist (per-viewer convenience) ---------- */
+  var KEY = 'cbp-checks-v1', saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ saved = {}; }
+  var boxes = document.querySelectorAll('input[data-ck]');
+  boxes.forEach(function(b){ if(saved[b.dataset.ck]) b.checked = true; });
+  function updateProg(){
+    var all = document.querySelectorAll('#checklist input[data-ck]'), n = 0;
+    all.forEach(function(b){ if(b.checked) n++; });
+    var p = all.length ? n/all.length*100 : 0;
+    $('prog').style.width = p + '%'; $('progBar').setAttribute('aria-valuenow', Math.round(p));
+    $('progTxt').textContent = n + ' of ' + all.length + ' done';
+  }
+  boxes.forEach(function(b){
+    b.addEventListener('change', function(){
+      saved[b.dataset.ck] = b.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e){}
+      updateProg();
+    });
+  });
+
+  /* ---------- go ---------- */
+  function updateAll(){ updateScorecard(); updateBid(); updateSim(); }
+  updateAll(); updateSignal(); updateDiy(); updateProg();
+})();
+</script>
+</body>
+</html>
