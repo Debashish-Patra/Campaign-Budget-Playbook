@@ -1,0 +1,5 @@
+event,source_system,owner,identifier_needed,sent_to,platform_event_name,expected_delay,status
+Lead submitted,Website or lead form,,Click ID captured on the form,Google Ads and Meta,,Instant,Not started
+Qualified lead,CRM,,Click ID stored on the lead record,Google Ads and Meta,,Hours to days,Not started
+Account opened,Onboarding or KYC system,,Click ID or hashed consented identifier,Google Ads and Meta,,Days,Not started
+First trade (activated),Trading platform,,Click ID or hashed consented identifier,Google Ads and Meta,,Days to weeks,Not started
